@@ -3,10 +3,9 @@ const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
 const questionContainer = document.getElementById('question-container');
 const questionText = document.getElementById('question');
-const btn1 = document.getElementById('btn1');
-const btn2 = document.getElementById('btn2');
-const btn3 = document.getElementById('btn3');
-const btn4 = document.getElementById('btn4');
+const btn = document.getElementById('testBtn');
+const btnContainer = document.getElementById('answer-buttons');
+const highScoreDisplay = document.querySelector('.timer-value');
 const questionArray = [{
     question: "Which is not a keyword to declare a variable?",
     answers: [
@@ -61,66 +60,106 @@ const questionArray = [{
         {text: 'Math.prayer(x,y)', correct: false},
     ]
 }]
+let highScore;
 let timeLeft = 11;
 let userScore = 0;
+let j = 0;
 
-startButton.addEventListener('click', startGame);
+function retrieveHighScore() {
+    const highScoreObj = localStorage.getItem('highScore');
+    highScore = highScoreObj.score;
+    highScoreDisplay.textContent = highScore;
+}
+
 
 function countdown() {
 
 var timeInterval = setInterval(function() {
     timeLeft--;
     timer.textContent = timeLeft;
-    if (timeLeft === 0) {
-        clearInterval(timeInterval);
+    if (timeLeft === 0 || timeLeft < 0) {
+        timer.textContent = 0;
         endGame();
+        clearInterval(timeInterval);
     }
 }, 1000);
 
 }
 
 function startGame() {
-    console.log('game started');
     startButton.classList.add('hide');
     questionContainer.classList.remove('hide');
-    // nextButton.classList.remove('hide');
     countdown();
     setNextQuestion();
 }
 
 function setNextQuestion() {
+    if (j === questionArray.length) {
+        endGame();
+    }
 
+    while(btnContainer.firstChild) {
+        btnContainer.removeChild(btnContainer.firstChild);
+    }
+
+        questionText.textContent = questionArray[j].question;
+    for (let i = 0; i < questionArray[j].answers.length; i++) {
+        let tBtn = document.createElement('btn');
+        tBtn.classList = 'testBtn'
+        tBtn.textContent = questionArray[j].answers[i].text;
+        tBtn.id = questionArray[j].answers[i].correct;
+        btnContainer.appendChild(tBtn);
+    }
+    j++;
+}
+    
+function selectQuestion(event) {
+        let element = event.target;
+        if (element.matches('.testBtn')) {
+            if (element.id === 'true') {
+                userScore++;
+                console.log(userScore);
+            } else {
+                timeLeft -= 3;
+            }
+            setNextQuestion();
+        }
 }
 
-questionContainer.addEventListener('click', function(event) {
-    let element = event.target;
-    if (element.matches('.btn')) {
-        if (element.dataset.correct === 'true') {
-            userScore++;
-            console.log(userScore);
-        } else {
-            timeLeft -= 3;
-        }
-        setNextQuestion();
+function getInitials() {
+    let storeScore = window.prompt('Enter your initials:');
+    if (!storeScore) {
+        window.alert('Please enter your initials');
+        storeScore = getInitials();
     }
-})
+    return storeScore;
+}
+
+function resetGame() {
+    timeLeft = 11;
+    userScore = 0;
+    j = 0;
+}
 
 function endGame() {
-
+    let userInitials
     //Hide questions
     questionContainer.classList.add('hide');
 
     //Get initials from user to create key for local storage
-    const getInitials = function() {
-        let highRoller = window.prompt('Enter your initials:');
-        if (!highRoller) {
-            window.alert('Please enter your initials');
-            getInitials();
-        }
+    if (userScore > highScore) {
+        window.alert('New High Score!')
+        userInitials = getInitials();
+        highScore = userScore;
+        highScoreDisplay.textContent = highScore;
+        localStorage.setItem('highScoreObj', JSON.stringify(userInitials), JSON.stringify(highScore));
+    } else {
+        window.alert('Game Over')
+        userInitials = getInitials();
+        localStorage.setItem(JSON.stringify(userInitials), JSON.stringify(userScore));
     }
-    //prompt user with their score and ask for initials
-    //store info from prompt to local storage
-    //update highscore banner if new high score
-    timeLeft = 11;
-    userScore = 0;
+
 }
+
+startButton.addEventListener('click', startGame);
+questionContainer.addEventListener('click', selectQuestion);
