@@ -47,11 +47,11 @@ body {
     outline: none;
 }
 
-.btn:hover {
+.testBtn:hover {
     filter: brightness(125%);
 }
 
-.btn:active {
+.testBtn:active {
     transform: translate(0, 0.2rem);
 }
 
@@ -91,7 +91,7 @@ body {
     background-color: white;
     box-shadow: 0 0 10px 2px;
     border-radius: 5px;
-    width: 200px;
+    width: 230px;
     max-width: 40%;
     padding: 10px;
 }
