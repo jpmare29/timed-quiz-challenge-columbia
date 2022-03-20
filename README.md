@@ -19,3 +19,6 @@ question counter and user score. It also displays the start button and hides its
 https://jpmare29.github.io/timed-quiz-challenge-columbia/
 
 ![2022-03-20](https://user-images.githubusercontent.com/74988217/159170751-e144fbe6-1516-451f-9e00-217f643e6c0f.png)
+
+Some CSS Styling and Layout assistance was obtained from the youtube video "Build A Quiz App With JavaScript" from the channel Web Dev Simplified.
+https://www.youtube.com/watch?v=riDzcEQbX6k&list=PLylRhEx0-6wJx2pZC1SeZ4p2W3VlLLM8t&index=10&t=130s&ab_channel=WebDevSimplified
